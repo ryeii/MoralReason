@@ -310,6 +310,190 @@ These findings establish that LLM agents can be systematically trained to intern
 <!-- End QA Viewer Section -->
 
 
+<!-- Dataset Comparison Section (Table 1) -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">
+      How Does Our Dataset Compare to Existing Moral Benchmarks?
+    </h2>
+
+    <!-- Image (Top) -->
+    <div class="columns is-centered" style="margin-top: 1.5rem;">
+      <div class="column is-three-quarters has-text-centered">
+        <figure class="image">
+          <img src="static/images/table1.png"
+               alt="Comparison of Moral-Reason-QA with existing moral reasoning datasets">
+        </figure>
+      </div>
+    </div>
+
+    <!-- Text (Bottom) -->
+    <div class="columns is-centered" style="margin-top: 1.5rem;">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+            Existing moral reasoning datasets primarily focus on <b>evaluating</b> LLM behavior using
+            question–answer formats, usually without revealing the underlying reasoning process.
+            They also tend to emphasize one specific ethical perspective, limiting their usefulness
+            for studying broader alignment behaviors.
+          </p>
+          <p style="margin-top: 0.75rem;">
+            <b>Moral-Reason-QA</b> expands 680 high-ambiguity moral scenarios with complete reasoning
+            traces across <b>three distinct frameworks</b>—utilitarian, deontological, and virtue
+            ethics. This makes it the first dataset designed explicitly for <b>reasoning-level
+            reinforcement learning</b> and <b>cross-framework moral generalization</b> in LLM agents.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- Framework Correlation Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">
+      Noticed some consensus between frameworks? We've measured that.
+    </h2>
+    <div class="columns is-vcentered">
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/correlation_figure.png"
+               alt="Correlation matrix between moral frameworks in Moral-Reason-QA">
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image" style="max-width: 420px; margin: 0 auto 1rem;">
+          <img src="static/images/phi_equation.png"
+               alt="Phi-coefficient formula used for measuring correlations">
+        </figure>
+        <div class="content has-text-justified">
+          <p>
+            To quantify how often different moral frameworks agree or disagree on the same action,
+            we compute pairwise correlations using the <b>ϕ-coefficient</b> over binary alignment labels.
+            Positive ϕ values indicate that two frameworks tend to endorse the same actions,
+            negative values reveal systematic disagreement, and values near zero suggest little association.
+            This analysis shows that frameworks occasionally converge on the same choice, while still
+            preserving meaningful divergence across Moral-Reason-QA.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Formal Problem Definition Section -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">From Moral Scenarios to Formal Alignment Objectives</h2>
+    <div class="columns is-vcentered">
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/definition1.png"
+               alt="Definition 1: Moral decision frameworks and aligned actions">
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/definition2.png"
+               alt="Definition 2: Softmax-normalized alignment score over frameworks">
+        </figure>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+            We formalize moral alignment by (1) defining a set of moral decision frameworks and
+            labeling which actions are compatible with each, and (2) introducing a softmax-normalized
+            <b>alignment score</b> that measures how strongly an LLM’s behavior aligns with each framework
+            across a dataset. This bridges informal moral intuitions and a precise optimization
+            objective that can be used for training and evaluating LLM agents.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Reward Formulation Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Rewarding Both Decisions and Moral Reasoning</h2>
+    <div class="columns is-vcentered">
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/alignment_reward.png"
+               alt="Alignment reward for matching framework-consistent actions">
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/keyword_reward.png"
+               alt="Keyword reward for framework-specific reasoning cues">
+        </figure>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-two-thirds">
+        <div class="content has-text-justified">
+          <p>
+            Our GRPO training uses a composite reward with two components:
+            an <b>alignment reward</b> that encourages selecting the action labeled as aligned with
+            the target framework, and a <b>keyword reward</b> that softly rewards reasoning traces
+            that explicitly invoke framework-specific concepts (e.g., utility, duty, virtue).
+            The keyword reward is capped so it cannot compensate for choosing the wrong action,
+            ensuring that the model must align both its choice and its reasoning style.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Results / Radar Plot Section -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">How Well Do Moral Frameworks Generalize?</h2>
+    <div class="columns is-vcentered" style="margin-top: 1.5rem;">
+      <!-- Right: Text Explanation -->
+      <div class="column is-half">
+        <div class="content has-text-justified">
+          <p>
+            On out-of-distribution evaluation scenarios, GRPO training sharply shifts the model’s
+            moral preference: the utilitarian-aligned agent nearly saturates its utilitarian score,
+            while the deontological-aligned agent substantially boosts deontological alignment and
+            suppresses competing frameworks. These results show that reasoning-level reinforcement
+            learning can reliably steer LLM agents toward specific moral frameworks, even on novel
+            moral dilemmas.
+          </p>
+          <p style="margin-top: 0.75rem;">
+            Interestingly, the base model starts with a strong virtue-ethics bias, and our method
+            reveals how different training runs selectively reorient this preference toward
+            utilitarian or deontological behavior—highlighting both the flexibility and limits
+            of moral fine-tuning in LLM agents.
+          </p>
+        </div>
+      </div>
+      <!-- Left: Radar Plot Image -->
+      <div class="column is-half">
+        <figure class="image">
+          <img src="static/images/radar_plot.png"
+               alt="Radar plots of OOD alignment scores across moral frameworks">
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 
 <!--BibTex citation -->
   <section class="section" id="BibTeX">
